@@ -1,4 +1,5 @@
 #include "Function.h"
+#include <cmath>
 
 int Function::coef;
 

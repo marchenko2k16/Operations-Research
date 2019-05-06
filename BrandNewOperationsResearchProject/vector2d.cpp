@@ -1,4 +1,5 @@
 #include "vector2d.h"
+#include <cmath>
 
 vector2d vector2d::operator+(vector2d v2)
 {
@@ -48,6 +49,7 @@ vector2d vector2d::normalizedVec()
 
 vector2d::vector2d() : x{ 0 }, y{ 0 } {}
 vector2d::vector2d(double _x, double _y) : x{ _x }, y{ _y } {}
+
 
 vector2d operator*(const double coef, vector2d& v)
 {

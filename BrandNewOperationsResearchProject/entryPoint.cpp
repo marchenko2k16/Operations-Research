@@ -23,15 +23,15 @@ int main()
 
 	for (auto i = 0; i < 4; ++i)
 	{
-
+		if (i == 3) countings.direction.push_back(countings.pointX.at(3) - countings.pointX.at(1));
 		std::pair<double,double> interval = Sven::findInterval(countings.pointX.at(i), countings.direction.at(i));
 	
-		if (i == 0) countings.lambda.at(i + 1) = Dychotomy::findStep(interval);
-		if (i == 1) countings.lambda.at(i + 1) = GoldenRatio::findStep(interval);
-		if (i == 3) countings.direction.at(i + 1) = (countings.pointX.at(3) - countings.pointX.at(1));
-		countings.lambda.at(i + 1) = DSK::findStep(interval);
+		if (i == 0) countings.lambda.push_back(Dychotomy::findStep(interval));
+		if (i == 1) countings.lambda.push_back(GoldenRatio::findStep(interval));
+		else countings.lambda.push_back(DSK::findStep(interval));
 
-		countings.pointX.at(i + 1) = countings.pointX.at(i) + countings.direction.at(i) * countings.lambda.at(i + 1);
+
+		countings.pointX.push_back(countings.pointX.at(i) + countings.direction.at(i) * countings.lambda.at(i + 1));
 	}
 
 } 
