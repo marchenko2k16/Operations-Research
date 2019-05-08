@@ -2,6 +2,8 @@
 
 #include "vector2d.h"
 
+extern unsigned int functionCallCounts;
+
 class Function
 {
 private:

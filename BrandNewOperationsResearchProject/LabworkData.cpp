@@ -1,9 +1,8 @@
 #include "LabworkData.h"
 
-LabworkCountings::LabworkCountings(double coef, double lambda0)
+LabworkCountings::LabworkCountings(double coef)
 {
 	pointX.push_back(vector2d(-1.3 * coef - 4, -1.3 * coef - 4));
-	lambda.push_back(lambda0);
 }
 
 void LabworkCountings::calcDelta()

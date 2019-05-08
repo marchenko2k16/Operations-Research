@@ -12,7 +12,7 @@ public:
 	std::vector<double> lambda;
 	std::vector<double> delta;
 
-	LabworkCountings(double coef, double lambda0);
+	LabworkCountings(double coef);
 	void calcDelta();
 };
 

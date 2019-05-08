@@ -2,12 +2,13 @@
 #include <utility>
 #include "vector2d.h"
 
+
 namespace Sven
 {
-	std::pair<double, double> findInterval(vector2d _point, vector2d direction);
+	std::pair<double, double> findInterval(vector2d _point, vector2d direction, double delta);
 }
 
-namespace Dychotomy
+namespace Dichotomy
 {
 	double findStep(std::pair<double, double>);
 }

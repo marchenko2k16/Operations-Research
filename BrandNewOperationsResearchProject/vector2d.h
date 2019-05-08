@@ -15,7 +15,6 @@ public:
 	vector2d operator/ (double devideBy);
 	double magnitude() const;
 
-
 	double distance(const vector2d& vec2d);
 	vector2d normalizedVec();
 
