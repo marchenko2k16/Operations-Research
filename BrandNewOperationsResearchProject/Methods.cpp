@@ -4,83 +4,140 @@
 #include <vector>
 #include <string>
 
+#include <iostream>
 #include <cmath>
 
 std::pair<double, double> Sven::findInterval(vector2d _point, vector2d direction, double delta)
 {
-	std::vector<double> svenLambdas;
-	std::vector<double> functionValues;
-	
-	double lambdaMinus	= 0 - delta;
-	double lambdaPlus	= 0 + delta;
-
-	double plusDeltaFunc(Function::calcFunction(_point + direction * lambdaPlus));
-	double minusDeltaFunc(Function::calcFunction(_point + direction * lambdaMinus));
- 	char sign;
-	
-	if (minusDeltaFunc > plusDeltaFunc)
+	int k = 1;
+	if (Function::calcFunction(_point + direction * delta) >
+		Function::calcFunction(_point - direction * delta)) 
 	{
-		sign = 1;
-		svenLambdas.push_back(lambdaPlus);
-		functionValues.push_back(plusDeltaFunc);
+		direction = direction  * (-1);
 	}
-	else if(plusDeltaFunc > minusDeltaFunc)
+	double lambda{};
+	lambda += delta;
+
+	while (Function::calcFunction(_point + lambda * direction) >
+		Function::calcFunction(_point + (lambda + pow(2, k) * delta) * direction))
 	{
-		sign = -1;
-		svenLambdas.push_back(lambdaMinus);
-		functionValues.push_back(minusDeltaFunc);
+		lambda += pow(2, k) * delta;
+		++k;
 	}
 
-	for (int i = 1; ;++i)
-	{
-		svenLambdas.push_back(svenLambdas.at(i - 1) + sign * pow(2,i)*delta);
-		functionValues.push_back(Function::calcFunction(_point + direction*svenLambdas.at(i)));
-		if (functionValues.at(i) > functionValues.at(i - 1))
-		{
-			break;
-		}
-	}
-	double middleLambdaValue = (svenLambdas.at(svenLambdas.size() - 1) + svenLambdas.at(svenLambdas.size() - 2) ) / 2;
-	svenLambdas.insert(svenLambdas.begin() + svenLambdas.size() - 1, middleLambdaValue);
-
-	double functionValueStepBack(Function::calcFunction(_point + direction * svenLambdas.at(svenLambdas.size() - 2)));
-	functionValues.insert(functionValues.begin() + functionValues.size() - 1, functionValueStepBack);
+	lambda += pow(2, k - 1) * delta;
+	std::pair<double,double> interval;
 	
-	if (functionValues.at(functionValues.size() - 3) > functionValues.at(functionValues.size() - 2))
+	if (Function::calcFunction(_point + lambda * direction) >
+		Function::calcFunction(_point + (lambda + pow(2, k - 1) * delta) * direction))
 	{
-		return std::pair<double, double>
-			(svenLambdas.at(svenLambdas.size() - 3),
-				svenLambdas.at(svenLambdas.size() - 1));
+		interval.first = lambda - pow(2, k) * delta;
+		interval.second = lambda;
 	}
 	else
 	{
-		return std::pair<double, double>
-			(svenLambdas.at(svenLambdas.size() - 4),
-				svenLambdas.at(svenLambdas.size() - 2));
+		interval.first = lambda - pow(2, k - 1) * delta;
+		interval.second = lambda + pow(2, k - 1) * delta;
 	}
+
+	std::cout << "Sven interval : " << interval.first << " - " << interval.second << std::endl;
+	return interval;
 }
 
-double GoldenRatio::findStep(std::pair<double, double>)
+
+double Dichotomy::findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone)
 {
+	double a = interval.first;
+	double b = interval.second;
+	double middle = (a + b) / 2;
+	while (b - a > epsilone)
+	{
+		double left = (a + middle) / 2;
+		double right = (b + middle) / 2;
+		double funcLeft = Function::calcFunction(_point + direction * left);
+		double funcMid = Function::calcFunction(_point + direction * middle);
+		double funcRight = Function::calcFunction(_point + direction * right); 
 
+		if (funcLeft < funcMid)
+		{
+			b = middle;
+			middle = left;
+		}
+		else if (funcRight < funcMid)
+		{
+			a = middle;
+			middle = right;
+		}
+		else
+		{
+			a = left;
+			b = right;
+		}
+	}
+	std::cout << "Dichotomy interval : " << a << " - " << b << std::endl;
 
-
-	return 0.0;
+	return (a + b) / 2;
 }
 
-double Dichotomy::findStep(std::pair<double, double>)
-{
+double GoldenRatio::findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone)
+{	
+	double left = interval.first;
+	double right = interval.second;
 
+	double x1 = left + 0.382 * (right - left);
+	double x2 = left + 0.618 * (right - left);
+	double f1 = Function::calcFunction(_point + direction * x1);
+	double f2 = Function::calcFunction(_point + direction * x2);
 
+	do 
+	{
+		if (f1 <= f2) 
+		{
+			right = x2;
+			x2 = x1;
+			f2 = f1;
+			x1 = left + 0.382 * (right - left);
+			f1 = Function::calcFunction(_point + direction * x1);
+		}
+		else 
+		{
+			left = x1;
+			x1 = x2;
+			f1 = f2;
+			x2 = left + 0.618 * (right - left);
+			f2 = Function::calcFunction(_point + direction * x2);
+		}
+	} while ((right - left) > epsilone);
 
-	return 0.0;
+	std::cout << "Golden Ratio interval : " << left << " - " << right << std::endl;
+
+	return (right + left) / 2;
 }
 
-double DSK::findStep(std::pair<double, double>)
+double DSK::findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone)
 {
+	double left = interval.first;
+	double right = interval.second;
+	double middle = (left + right) / 2;
 
+	double f1 = Function::calcFunction(_point + direction * left);
+	double f2 = Function::calcFunction(_point + direction * middle);
+	double f3 = Function::calcFunction(_point + direction * right);
 
+	double X = middle + (middle - left) * (f1 - f3) / (2 * (f1 - 2 * f2 + f3));
+	double F = Function::calcFunction(_point + direction * X);
 
+	while ((abs(middle - X) > epsilone) && (abs(f2 - F) > epsilone)) {
+		right = middle;
+		f3 = f2;
+		middle = X;
+		f2 = F;
+		double a1 = (f2 - f1) / (middle - left);
+		double a2 = ((f3 - f1) / (right - left) - a1) / (right - middle);
+		X = (left + middle) / 2 - a1 / (2 * a2);
+	}	
+	
+	std::cout << "DSK  interval : " << left << " - " << right << std::endl;
 
-	return 0.0;
+	return X;
 }

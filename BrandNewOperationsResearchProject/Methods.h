@@ -8,17 +8,18 @@ namespace Sven
 	std::pair<double, double> findInterval(vector2d _point, vector2d direction, double delta);
 }
 
-namespace Dichotomy
-{
-	double findStep(std::pair<double, double>);
-}
-
 namespace GoldenRatio
 {
-	double findStep(std::pair<double, double>);
+	double findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone);
 }
+
+namespace Dichotomy
+{
+	double findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone);
+}
+
 
 namespace DSK
 {
-	double findStep(std::pair<double,double>);
+	double findStep(std::pair<double, double> interval, vector2d _point, vector2d direction, double epsilone);
 }
