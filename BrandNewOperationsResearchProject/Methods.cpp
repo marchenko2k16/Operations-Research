@@ -40,7 +40,7 @@ std::pair<double, double> Sven::findInterval(vector2d _point, vector2d direction
 		interval.second = lambda + pow(2, k - 1) * delta;
 	}
 
-	std::cout << "Sven interval : " << interval.first << " - " << interval.second << std::endl;
+	std::cout << "Sven interval: [" << interval.first << " ; " << interval.second << "]" << std::endl;
 	return interval;
 }
 
@@ -74,7 +74,7 @@ double Dichotomy::findStep(std::pair<double, double> interval, vector2d _point, 
 			b = right;
 		}
 	}
-	std::cout << "Dichotomy interval : " << a << " - " << b << std::endl;
+	std::cout << "Dichotomy interval: [" << a << " ; " << b  << "]" << std::endl;
 
 	return (a + b) / 2;
 }
@@ -109,7 +109,7 @@ double GoldenRatio::findStep(std::pair<double, double> interval, vector2d _point
 		}
 	} while ((right - left) > epsilone);
 
-	std::cout << "Golden Ratio interval : " << left << " - " << right << std::endl;
+	std::cout << "Golden Ratio interval: [" << left << " ; " << right << "]" <<  std::endl;
 
 	return (right + left) / 2;
 }
@@ -137,7 +137,7 @@ double DSK::findStep(std::pair<double, double> interval, vector2d _point, vector
 		X = (left + middle) / 2 - a1 / (2 * a2);
 	}	
 	
-	std::cout << "DSK  interval : " << left << " - " << right << std::endl;
+	std::cout << "DSK  interval: [" << left << " ; " << right << "]" << std::endl;
 
 	return X;
 }

@@ -9,7 +9,7 @@ int main()
 	functionCallCounts = 0;
 	//DEFAULT EXERCISE CONDITIONS
 	double lambda0 = 0;
-	int coef = 9;
+	int coef = 16;
 	vector2d moveY(0, 1);
 	vector2d moveX(1, 0);
 	
@@ -33,6 +33,7 @@ int main()
 		}
 
 		countings.calcDelta();
+		std::cout << "Delta " << i << " is " << countings.delta.at(i) << std::endl;
 
 		std::pair<double,double> interval = Sven::findInterval(countings.pointX.at(i), countings.direction.at(i), countings.delta.at(i));
 	
