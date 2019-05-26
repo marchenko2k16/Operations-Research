@@ -13,7 +13,7 @@ std::pair<double, double> Sven::findInterval(vector2d _point, vector2d direction
 	if (Function::calcFunction(_point + direction * delta) >
 		Function::calcFunction(_point - direction * delta)) 
 	{
-		direction = direction  * (-1);
+		delta = delta  * (-1);
 	}
 	double lambda{};
 	lambda += delta;
